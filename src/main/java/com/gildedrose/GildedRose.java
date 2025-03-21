@@ -23,7 +23,11 @@ class GildedRose {
                 item.quality = item.quality + 1;
 
                 if (isBackstagePasses(item)) {
-                    if (item.sellIn < 11 || item.sellIn < 6) {
+                    if (item.sellIn < 11) {
+                        incrementQuality(item);
+                    }
+
+                    if (item.sellIn < 6) {
                         incrementQuality(item);
                     }
                 }
