@@ -18,24 +18,23 @@ class GildedRose {
 
     private void handleUpdateQuality(Item item) {
         if (isAgedBrie(item) || isBackstagePasses(item)) {
-                if (item.quality < 50) {
-                    item.quality = item.quality + 1;
 
-                    if (isBackstagePasses(item)) {
-                        if (item.sellIn < 11) {
-                            incrementQuality(item);
-                        }
+            if (item.quality < 50) {
+                item.quality = item.quality + 1;
 
-                        if (item.sellIn < 6) {
-                            incrementQuality(item);
-                        }
+                if (isBackstagePasses(item)) {
+                    if (item.sellIn < 11) {
+                        incrementQuality(item);
+                    }
+
+                    if (item.sellIn < 6) {
+                        incrementQuality(item);
                     }
                 }
-            } else if (!isSulfuras(item)){
-                if (item.quality > 0) {
-                    item.quality = item.quality - 1;
-                }
             }
+        } else if (!isSulfuras(item)){
+            decrementQuality(item);
+        }
     }
 
     private void incrementQuality(Item item) {
@@ -46,6 +45,10 @@ class GildedRose {
 
     private boolean isSulfuras(Item item) {
         return item.name.equals("Sulfuras, Hand of Ragnaros");
+    }
+
+    private boolean isConjured(Item item) {
+        return item.name.equals("Conjured");
     }
 
     private void updateSellIn(Item item) {
@@ -67,11 +70,20 @@ class GildedRose {
             if (isBackstagePasses(item)) {
                 item.quality = 0;
             } else {
-                if (item.quality > 0) {
-                    if (!isSulfuras(item)) {
-                        item.quality = item.quality - 1;
-                    }
+                if (!isSulfuras(item)) {
+                    decrementQuality(item);
                 }
+            }
+        }
+    }
+
+    private void decrementQuality(Item item) {
+        if (item.quality > 0) {
+
+            if(isConjured(item)){
+                item.quality = item.quality - 2;
+            }else if (!isSulfuras(item)) {
+                item.quality = item.quality - 1;
             }
         }
     }
