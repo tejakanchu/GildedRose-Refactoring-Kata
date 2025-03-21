@@ -1,6 +1,10 @@
 package com.gildedrose;
 
 class GildedRose {
+    public static final String BACKSTAGE_PASSES = "Backstage passes to a TAFKAL80ETC concert";
+    public static final String AGED_BRIE = "Aged Brie";
+    public static final String SULFURAS = "Sulfuras, Hand of Ragnaros";
+    public static final String CONJURED = "Conjured";
     Item[] items;
 
     public GildedRose(Item[] items) {
@@ -41,27 +45,6 @@ class GildedRose {
         }
     }
 
-    private void incrementQuality(Item item) {
-        if (item.quality < 50) {
-            item.quality = item.quality + 1;
-        }
-    }
-
-    private boolean isSulfuras(Item item) {
-        return item.name.equals("Sulfuras, Hand of Ragnaros");
-    }
-
-    private boolean isConjured(Item item) {
-        return item.name.equals("Conjured");
-    }
-
-    private void updateSellIn(Item item) {
-        if (isSulfuras(item)) {
-            return;
-        }
-        item.sellIn--;
-    }
-
     private void handleExpired(Item item) {
         if (isAgedBrie(item)) {
             incrementQuality(item);
@@ -85,11 +68,32 @@ class GildedRose {
         }
     }
 
+    private void incrementQuality(Item item) {
+        if (item.quality < 50) {
+            item.quality = item.quality + 1;
+        }
+    }
+
+    private void updateSellIn(Item item) {
+        if (isSulfuras(item)) {
+            return;
+        }
+        item.sellIn--;
+    }
+
     private boolean isBackstagePasses(Item item) {
-        return item.name.equals("Backstage passes to a TAFKAL80ETC concert");
+        return item.name.equals(BACKSTAGE_PASSES);
     }
 
     private boolean isAgedBrie(Item item) {
-        return item.name.equals("Aged Brie");
+        return item.name.equals(AGED_BRIE);
+    }
+
+    private boolean isSulfuras(Item item) {
+        return item.name.equals(SULFURAS);
+    }
+
+    private boolean isConjured(Item item) {
+        return item.name.equals(CONJURED);
     }
 }
