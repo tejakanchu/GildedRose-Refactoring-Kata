@@ -12,27 +12,30 @@ class GildedRose {
 
             handleUpdateQuality(item);
             updateSellIn(item);
-            handleItemsExpired(item);
+            if (item.sellIn < 0) {
+                handleExpired(item);
+            }
         }
     }
 
     private void handleUpdateQuality(Item item) {
-        if (isAgedBrie(item) || isBackstagePasses(item)) {
+        if (isAgedBrie(item)) {
+            incrementQuality(item);
+
+        } else if(isBackstagePasses(item)){
+
+            incrementQuality(item);
 
             if (item.quality < 50) {
-                item.quality = item.quality + 1;
+                if (item.sellIn < 11) {
+                    incrementQuality(item);
+                }
 
-                if (isBackstagePasses(item)) {
-                    if (item.sellIn < 11) {
-                        incrementQuality(item);
-                    }
-
-
-                    if (item.sellIn < 6) {
-                        incrementQuality(item);
-                    }
+                if (item.sellIn < 6) {
+                    incrementQuality(item);
                 }
             }
+
         } else if (!isSulfuras(item)){
             decrementQuality(item);
         }
@@ -53,37 +56,30 @@ class GildedRose {
     }
 
     private void updateSellIn(Item item) {
-        if (!isSulfuras(item)) {
-            item.sellIn = item.sellIn - 1;
+        if (isSulfuras(item)) {
+            return;
         }
-    }
-
-    private void handleItemsExpired(Item item) {
-        if (item.sellIn < 0) {
-            handleExpired(item);
-        }
+        item.sellIn--;
     }
 
     private void handleExpired(Item item) {
         if (isAgedBrie(item)) {
             incrementQuality(item);
+        } else if (isBackstagePasses(item)) {
+            item.quality = 0;
+        } else if (isSulfuras(item)) {
+            return;
         } else {
-            if (isBackstagePasses(item)) {
-                item.quality = 0;
-            } else {
-                if (!isSulfuras(item)) {
-                    decrementQuality(item);
-                }
-            }
+            decrementQuality(item);
         }
     }
 
     private void decrementQuality(Item item) {
         if (item.quality > 0) {
 
-            if(isConjured(item)){
+            if (isConjured(item)){
                 item.quality = item.quality - 2;
-            }else if (!isSulfuras(item)) {
+            } else if (!isSulfuras(item)) {
                 item.quality = item.quality - 1;
             }
         }
