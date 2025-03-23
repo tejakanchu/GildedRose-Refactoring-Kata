@@ -28,16 +28,12 @@ class GildedRose {
 
         } else if(isBackstagePasses(item)){
 
-            incrementQuality(item);
+            if(isAfterTheConcert(item)) {
+                item.quality = 0;
 
-            if (item.quality < 50) {
-                if (item.sellIn < 11) {
-                    incrementQuality(item);
-                }
-
-                if (item.sellIn < 6) {
-                    incrementQuality(item);
-                }
+            } else if(item.quality < 50) {
+                int qualityIncrement = qualityIncreaseForBackstages(item.sellIn);
+                item.quality = item.quality + qualityIncrement;
             }
 
         } else if (!isSulfuras(item)){
@@ -81,6 +77,19 @@ class GildedRose {
         item.sellIn--;
     }
 
+    private int qualityIncreaseForBackstages(Integer remainingDaysBeforeConcert) {
+        if(remainingDaysBeforeConcert <= 5) {
+            return 3;
+        }
+        else if (remainingDaysBeforeConcert <= 10) {
+            return 2;
+        }
+        else {
+            return 1;
+        }
+    }
+
+
     private boolean isBackstagePasses(Item item) {
         return item.name.equals(BACKSTAGE_PASSES);
     }
@@ -95,5 +104,9 @@ class GildedRose {
 
     private boolean isConjured(Item item) {
         return item.name.equals(CONJURED);
+    }
+
+    private boolean isAfterTheConcert(Item item) {
+        return item.sellIn <= 0;
     }
 }
