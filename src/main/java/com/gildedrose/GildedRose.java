@@ -57,7 +57,7 @@ class GildedRose {
         if (item.quality > 0) {
 
             if (isConjured(item)){
-                item.quality = item.quality - 2;
+                item.quality = Math.max(0, item.quality - 2);
             } else if (!isSulfuras(item)) {
                 item.quality = item.quality - 1;
             }
